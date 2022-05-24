@@ -1,0 +1,437 @@
+openapi: 3.0.0
+info:
+  title: Отличный сервис
+  description: Описание к отличному сервису
+  version: 2.2.7
+
+servers:
+  - url: /
+
+components:
+  schemas:
+    Menu:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        photo:
+          type: string
+        isPublish:
+          type: boolean
+    Category:
+      properties:
+        id:
+          type: string
+        menuId:
+          type: string
+        title:
+          type: integer
+        photo:
+          type: string
+        isVisible:
+          type: boolean
+    Dish:
+      properties:
+        id:
+          type: string
+        categoryId:
+          type: string  
+        title:
+          type: string
+        description:
+          type: string
+        photo:
+          type: string
+        isPublish:
+          type: boolean
+        ingregients:
+          type: array
+        price:
+          type: integer
+  responses:
+    UnauthorizedError:
+      description: Access token is missing or invalid
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  
+paths:
+  /menus:
+    get:
+      tags:
+        - Menus
+      summary:  Вернуть все меню в системе
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items: 
+                  $ref: '#/components/schemas/Menu'
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
+    post:
+      tags:
+        - Menus
+      summary:  Cоздаст новое меню
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              title: example
+              properties:
+                title:
+                  type: string
+                photo:
+                  type: string
+                isPublish:
+                  type: boolean
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Menu"
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
+  /menu/{menuId}:
+    parameters:
+      - name: menuId
+        in: path
+        required: true
+        schema:
+          type: string
+    get:
+      tags:
+        - Clients
+      summary: Вернуть меню с заданным :menuId
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Menu"
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
+    put:
+      tags:
+        - Menus
+      summary: Обновить данные меню с заданным menuId
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              title: example
+              properties:
+                title:
+                  type: string
+                photo:
+                  type: string
+                isPublish:
+                  type: boolean
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Menu"
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
+    delete:
+      tags:
+        - Menus
+      summary: Удалить меню с заданным :menuId
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Menu"
+        401:
+          $ref: '#/components/responses/UnauthorizedError'      
+  /clients/{clientId}/order:
+    parameters:
+      - name: menuId
+        in: path
+        required: true
+        schema:
+          type: string
+    get:
+      tags:
+        - Menus
+      summary: Вернуть все блюда связанные с категорией c menuId
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items: 
+                  $ref: '#/components/schemas/Category'
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
+  /orders:
+    get:
+      tags:
+        - Categorys
+      summary: Вернуть все категории в системе
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items: 
+                  $ref: '#/components/schemas/Category'
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
+    post:
+      tags:
+        - Categorys
+      summary:  Создать категориию и привязать его к существующему блюду
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              title: example
+              properties:
+                menuId:
+                  type: string
+                title:
+                  type: integer
+                photo:
+                  type: string
+                isVisible:
+                  type: boolean
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Categorys"
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
+  /orders/{categoryId}:
+    parameters:
+      - name: categoryId
+        in: path
+        required: true
+        schema:
+          type: string
+    get:
+      tags:
+        - Categorys
+      summary: Вернуть категорию с заданным categoryId
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Categorys"
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
+    put:
+      tags:
+        - Categorys
+      summary: Обновить категорию с заданным categoryId
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              title: example
+              properties:
+                menuId:
+                  type: string
+                title:
+                  type: integer
+                photo:
+                  type: string
+                isVisible:
+                  type: boolean
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Categorys"
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
+    delete:
+      tags:
+        - Categorys
+      summary: Удалить категорию с заданным categoryId
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Categorys"
+        401:
+          $ref: '#/components/responses/UnauthorizedError'   
+  /orders/{orderId}/products:
+    parameters:
+      - name: orderId
+        in: path
+        required: true
+        schema:
+          type: string
+    get:
+      tags:
+        - Categorys
+      summary: Вернуть все блюда по заданному categoryId
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items: 
+                  $ref: '#/components/schemas/Categorys'
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
+  /products:
+    get:
+      tags:
+        - Dishes
+      summary: Получить все блюда в системе
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: "array"
+                items: 
+                  $ref: '#/components/schemas/Dishes'
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
+    post:
+      tags:
+        - Dishes
+      summary:  Добавить блюдо
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              title: example
+              properties:
+                name:
+                  type: string  
+                price:
+                  type: number
+                ageOfIssue:
+                  type: integer
+                lifeTime:
+                  type: integer
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Products"
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
+  /products/{productsId}:
+    parameters:
+      - name: productsId
+        in: path
+        required: true
+        schema:
+          type: string
+    get:
+      tags:
+        - Products
+      summary: Вернуть блюдо с заданным dishesId
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Dishes"
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
+          
+          
+    put:
+      tags:
+        - Dishes
+      summary: Обновить блюдо с заданным dishesId
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              title: example
+              properties:
+                categoryId:
+                  type: string  
+                title:
+                  type: string
+                description:
+                  type: string
+                photo:
+                  type: string
+                isPublish:
+                  type: boolean
+                ingregients:
+                  type: array
+                price:
+                  type: integer
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Dishes"
+        401:
+          $ref: '#/components/responses/UnauthorizedError'
+    delete:
+      tags:
+        - Dishes
+      summary: Удалить блюдо с заданным dishesId
+      responses:
+        200:
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Dishes"
+        401:
+          $ref: '#/components/responses/UnauthorizedError'   
